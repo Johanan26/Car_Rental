@@ -1,34 +1,38 @@
 package ie.atu.car_rental;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Pattern;
 import org.springframework.web.bind.annotation.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/CarRental")
-public class CarController(ProductServices myServices) {
-    private List<Product> list = new ArrayList<>();
+public class CarController {
+    private ProductServices myService;
 
-    @GetMapping("RentalBooking")
-    {
-        list = myService.listProduct(product);
+    public CarController(ProductServices myService){
+        this.myService = myService;
+    }
+    private List<Rental_Entity> list = new ArrayList<>();
+
+    @PostMapping("MakeBooking")
+    public List<Rental_Entity> newProduct(@Valid @RequestBody Product product){
+        list = myService.addProduct(product);
         return list;
     }
-
-    @PostMapping("MakeBooking/{rentalCode}")
-    public List<Product>newProduct(@Valid @RequestBody Product product){
-        list = myService.addProduct(product);
+    @GetMapping("RentalBooking/{rentalCode}")
+    public List<Rental_Entity> getProduct(@Valid @RequestBody Product product){
         return list;
     }
 
     @PutMapping("updateBooking/{rentalCode}")
-    public List<Product>updateProduct(@Valid @PathVariable String rentalCode  @RequestBody Product product){
+    public List<Rental_Entity> updateProduct(@Valid @PathVariable String rentalCode ,@RequestBody Product product){
         list = myService.updateProduct(rentalCode,product);
         return list;
     }
 
     @DeleteMapping("DeleteBooking/{rentalCode}")
-    public List<Product>deleteProduct(@Valid @PathVariable String rentalCode){
+    public List<Rental_Entity> deleteProduct(@Valid @PathVariable String rentalCode){
         list = myService.updateProduct(rentalCode);
         return list;
     }
